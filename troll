@@ -1769,3 +1769,75 @@ end
 end
 
 ModeChange()
+
+local meta = getrawmetatable(game) -- tot4lynotzki88e87romzomewhere
+local namecall = meta.__namecall
+local newindex = meta.__newindex
+local index = meta.__index
+setreadonly(meta,false)
+fakemodel = Instance.new("Model")
+fakemodel.Parent = game.Workspace
+fakehumanoid = Instance.new("Humanoid")
+fakevalue = Instance.new("BoolValue")
+fakevalue.Value = false
+ 
+meta.__newindex=function(self,k,new)
+    if not checkcaller() then
+        local Script=getfenv(2).script
+        if k == "CFrame" then
+            if self.Parent == game.Players.LocalPlayer.Character then
+                return
+            end
+        end
+        if tostring(self) == "Humanoid" and tostring(k) == "Health" then
+            return newindex(fakehumanoid,k,new)
+        end
+    end
+    return newindex(self,k,new)
+end
+
+
+meta.__newindex = newcclosure(function(self,key,value)
+    if checkcaller() then 
+        return newindex(self,key,value)
+    end
+    if self and self:IsA("Humanoid") then
+        game.StarterGui:SetCore("ResetButtonCallback",true)
+        if key == "WalkSpeed" then 
+            return
+        end
+        if key == "JumpPower" then 
+            return
+        end
+        if key == "HipHeight" then 
+            return
+        end
+        if key == "Health" then 
+            return
+        end
+    end
+    if key == "CFrame" and self.Name == "Torso" or self.Name == "HumanoidRootPart" then 
+        return
+    end
+    return newindex(self,key,value)
+end)
+
+meta.__namecall = newcclosure(function(self,...)
+    local args = {...}
+    local t = getnamecallmethod()
+    if t == "BreakJoints" then 
+        return wait(9e9)
+    end
+    if t == "Kick" then
+        return wait(9e9)
+    end
+    if t == "FireServer" then 
+        if self.Name == "lIII" or self.Parent.Name == "ReplicatedStorage" then 
+            return wait(9e9)
+        end
+        if args[1] == "hey" then 
+            return wait(9e9)
+        end
+    end
+    return namecall(self,...)
+end)
